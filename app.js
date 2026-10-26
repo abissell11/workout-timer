@@ -11,7 +11,11 @@ const EXERCISES = [
 ];
 const DEFAULT_REPS = 10, DEFAULT_SETS = 3;
 // Rest seconds; ?rest=3 in the URL overrides for testing.
-const REST = Math.max(1, parseInt(new URLSearchParams(location.search).get('rest')) || 45);
+const REST_OPTIONS = [15, 20, 30, 45, 60], DEFAULT_REST = 45;
+const REST_OVERRIDE = parseInt(new URLSearchParams(location.search).get('rest')) || 0; // testing only
+let REST = parseInt(localStorage.getItem('restSeconds')) || DEFAULT_REST;
+if (!REST_OPTIONS.includes(REST)) REST = DEFAULT_REST;
+const restSecs = () => REST_OVERRIDE > 0 ? REST_OVERRIDE : REST;
 // ==============================================================================================
 
 const $ = id => document.getElementById(id);
@@ -25,7 +29,7 @@ function save() {
   localStorage.setItem(key(idx), JSON.stringify({ reps, sets })); return { reps, sets };
 }
 function clamp(v, max, d) { v = parseInt(v); return v > 0 ? Math.min(v, max) : d; }
-function show(id) { for (const s of ['exercise', 'timer', 'done']) $(s).classList.toggle('hidden', s !== id); }
+function show(id) { for (const s of ['cover', 'exercise', 'timer', 'done']) $(s).classList.toggle('hidden', s !== id); }
 
 function renderExercise() {
   const ex = EXERCISES[idx], v = load(idx);
@@ -46,7 +50,7 @@ function startRest() {
   $('tset').textContent = `Set ${setNo} of ${sets} done · ${reps} reps`;
   $('tnext').textContent = setNo < sets ? `Next: set ${setNo + 1} of ${sets}` :
     (idx + 1 < EXERCISES.length ? `Next exercise: ${EXERCISES[idx + 1].name}` : 'Last rest — then finished!');
-  remaining = REST; paused = false; $('pause').textContent = 'Pause';
+  remaining = restSecs(); $('restlen').textContent = REST; paused = false; $('pause').textContent = 'Pause';
   endAt = Date.now() + remaining * 1000; draw(remaining); show('timer'); requestWake();
   clearInterval(tick); tick = setInterval(onTick, 200);
 }
@@ -57,7 +61,7 @@ function onTick() {
 }
 function draw(left) {
   $('count').textContent = Math.ceil(left);
-  $('arc').style.strokeDashoffset = C * (1 - left / REST);
+  $('arc').style.strokeDashoffset = C * (1 - left / restSecs());
 }
 function stopTimer() { clearInterval(tick); tick = null; }
 function finishRest() {
@@ -103,7 +107,17 @@ $('back').onclick = () => idx > 0 && goTo(idx - 1);
 $('skip').onclick = () => goTo(idx + 1);
 $('pause').onclick = togglePause;
 $('cancel').onclick = () => { stopTimer(); releaseWake(); renderExercise(); };
-$('restart').onclick = () => goTo(0);
+$('restart').onclick = () => { stopTimer(); idx = 0; setNo = 1; showCover(); };
+$('start').onclick = () => { unlockAudio(); goTo(0); };
+function renderRests() {
+  $('rests').innerHTML = REST_OPTIONS.map(s => `<button class="rest${s === REST ? ' sel' : ''}" data-s="${s}" aria-pressed="${s === REST}">${s}s</button>`).join('');
+}
+$('rests').onclick = e => { const b = e.target.closest('button'); if (!b) return; REST = +b.dataset.s; localStorage.setItem('restSeconds', REST); renderRests(); };
+function showCover() { renderRests(); show('cover'); releaseWake(); }
 $('total').textContent = EXERCISES.length;
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-renderExercise();
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(r => r.update()).catch(() => {});
+  let reloaded = false; // a new SW took over: reload once (only if not mid-timer) so the new version shows
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (!reloaded && !tick && navigator.serviceWorker.controller) { reloaded = true; location.reload(); } });
+}
+showCover();

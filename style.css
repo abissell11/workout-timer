@@ -1,5 +1,5 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--a:#0d9488;--ad:#0f766e;--ink:#0f172a;--mut:#64748b;--bg:#f8fafc}
+:root{--a:#000;--ad:#262626;--ink:#0a0a0a;--mut:#6b6b6b;--bg:#ededed}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Roboto,sans-serif}
 .screen{max-width:520px;margin:0 auto;min-height:100dvh;padding:12px 18px calc(18px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
 .hidden{display:none}.center{justify-content:center;align-items:center;text-align:center}
@@ -14,7 +14,7 @@ label{display:flex;flex-direction:column;font-size:15px;font-weight:600;color:va
 input{font-size:34px;font-weight:700;text-align:center;padding:12px 6px;border:2px solid #cbd5e1;border-radius:14px;width:100%;color:var(--ink);background:#fff}
 input:focus{outline:none;border-color:var(--a)}
 .setinfo{text-align:center;font-size:20px;font-weight:700;margin:0}
-.go{background:var(--a);color:#fff;border:0;border-radius:18px;font-size:36px;font-weight:800;letter-spacing:2px;padding:20px;width:100%;box-shadow:0 6px 16px rgba(13,148,136,.35)}
+.go{background:var(--a);color:#fff;border:0;border-radius:18px;font-size:36px;font-weight:800;letter-spacing:2px;padding:20px;width:100%;box-shadow:0 6px 16px rgba(0,0,0,.3)}
 .go:active{background:var(--ad);transform:scale(.98)}
 .hint{text-align:center;color:var(--mut);margin:0;font-size:15px}
 .label{text-align:center;font-weight:800;letter-spacing:4px;color:var(--a);margin:10px 0 0}
@@ -26,3 +26,27 @@ input:focus{outline:none;border-color:var(--a)}
 .btn{font-size:20px;font-weight:700;padding:16px;border-radius:14px;border:0;background:var(--ink);color:#fff}
 .btn.ghost{background:#fff;color:var(--ink);border:2px solid #cbd5e1}
 .trophy{font-size:90px}
+
+.cover{background:#000;color:#fff;max-width:none;position:relative;overflow:hidden;justify-content:center;align-items:center;gap:18px}
+.cover>*{position:relative;max-width:480px;width:100%}
+.geo{position:absolute!important;inset:0;z-index:0!important;max-width:none!important;pointer-events:none}
+.geo i{position:absolute;display:block}
+.geo .l1,.geo .l2,.geo .l3{height:1px;width:160%;left:-30%;background:linear-gradient(90deg,transparent,#3a3a3a 30%,#555 50%,#3a3a3a 70%,transparent)}
+.geo .l1{top:12%;transform:rotate(-24deg)}.geo .l2{top:70%;transform:rotate(-24deg)}.geo .l3{top:88%;transform:rotate(18deg);opacity:.6}
+.geo .t1,.geo .t2,.geo .t3{width:0;height:0;border-style:solid}
+.geo .t1{top:-10px;right:-20px;border-width:0 0 140px 140px;border-color:transparent transparent #1c1c1c transparent}
+.geo .t2{bottom:-10px;left:-20px;border-width:120px 0 0 120px;border-color:transparent transparent transparent #161616}
+.geo .t3{top:46%;left:6%;border-width:0 14px 24px 14px;border-color:transparent transparent #2b2b2b transparent;transform:rotate(15deg)}
+.logo{width:min(82vw,400px)!important;aspect-ratio:1;display:block;animation:pop .9s cubic-bezier(.2,.8,.2,1) both;mix-blend-mode:lighten}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.cover h2{margin:0;text-align:center;font-size:20px;font-weight:800;letter-spacing:2px;text-transform:uppercase;animation:fade .8s .3s both}
+.rests{display:flex;gap:6px;animation:fade .8s .45s both}
+.rest{flex:1 1 0;min-width:0;padding:14px 0;font-size:18px;font-weight:800;border-radius:12px;background:transparent;color:#fff;border:2px solid #fff}
+.rest.sel{background:#fff;color:#000}
+.cover .go{background:#fff;color:#000;animation:fade .8s .6s both;box-shadow:0 0 0 2px #fff,0 0 30px rgba(255,255,255,.15)}
+.cover .go:active{background:#d4d4d4}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.label{color:#000}.nav{color:#000}
+#done{background:#000;color:#fff}#done .go{background:#fff;color:#000}#done .hint{color:#a3a3a3}
+input:focus{border-color:#000}
+.fullname{margin:0 0 -4px;text-align:center;font-size:12px;font-weight:600;letter-spacing:5px;text-transform:uppercase;color:#8a8a8a;animation:fade .8s .15s both}

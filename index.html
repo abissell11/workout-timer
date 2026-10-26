@@ -1,9 +1,17 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0d9488"><title>Workout Timer</title>
+<meta name="theme-color" content="#000000"><title>AGA - Andrew's Gym App</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="style.css"></head><body>
-<main id="exercise" class="screen">
+<main id="cover" class="screen cover">
+ <div class="geo" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="t1"></i><i class="t2"></i><i class="t3"></i></div>
+ <p class="fullname">Andrew's Gym App</p>
+ <img class="logo" src="images/logo.jpg" alt="AGA">
+ <h2>Choose your rest period</h2>
+ <div id="rests" class="rests"></div>
+ <button id="start" class="go">START</button>
+</main>
+<main id="exercise" class="screen hidden">
  <header class="top"><button id="back" class="nav">‹ Back</button><span id="progress"></span><button id="skip" class="nav">Skip ›</button></header>
  <div class="card"><img id="img" alt=""></div>
  <h1 id="name"></h1>
@@ -17,7 +25,7 @@
 </main>
 <main id="timer" class="screen hidden">
  <header class="top"><span></span><span id="tname"></span><span></span></header>
- <p class="label">REST</p>
+ <p class="label">REST · <span id="restlen"></span>s</p>
  <div class="ring"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="90"/><circle id="arc" class="fg" cx="100" cy="100" r="90"/></svg><div id="count">45</div></div>
  <p id="tset" class="setinfo"></p><p id="tnext" class="hint"></p>
  <div class="row"><button id="pause" class="btn">Pause</button><button id="cancel" class="btn ghost">Cancel</button></div>
